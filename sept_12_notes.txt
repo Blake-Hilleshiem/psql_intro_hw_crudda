@@ -1,0 +1,165 @@
+
+
+
+# ---------------
+
+'''
+Variable binding - will automatically qoute what's needed. Also known in Python as a Prepared statement. 
+
+For Postgres the result set is stored in the cursor. So you would need to run the fetchone() on the cursor. 
+'''
+
+
+# ---------------
+
+# def get_all_active_users():
+#     cursor.execute("""SELECT * FROM users WHERE active=1""")
+
+#     results = cursor.fetchall()
+#     [(),(),()]
+
+
+
+#     if results:
+#         lst_of_user_dicts = []
+#         user = {
+#           'user_id':'',
+#           'first_name':'',
+#           'last_name':'',
+#           'email':'',
+#           'phone':'',
+#           'city':'',
+#           'state':'',
+#           'org_id':'',
+#           'active':''
+#         }
+#         count = 0
+#         for user_data in results:
+#             print(f'{count}:',user_data)
+#             print(f'{count}:',user_data[0])
+
+
+#             user['user_id'] = user_data[0]
+#             print(f'{count} dict item:',user['user_id'])
+#             user['first_name'] = user_data[1]
+#             user['last_name'] = user_data[2]
+#             user['email'] = user_data[3]
+#             user['phone'] = user_data[4]
+#             user['city'] = user_data[5]
+#             user['state'] = user_data[6]
+#             user['org_id'] = user_data[7]
+#             user['active'] = user_data[8]
+
+#             lst_of_user_dicts.append(user)
+#             print(f'List after {count}:', lst_of_user_dicts)
+
+#             count += 1
+
+#         return lst_of_user_dicts
+     
+#     else:
+#        return None
+
+
+# --------------------------
+
+# my solutions, needs work:
+# Need to refactor this, need commas between each of the values. Probably should just use the .join function. 
+# def update_org(user_id,name,phone,city,state,active):
+
+#     lst_fields = ['name','phone','city','state','active']
+#     lst_values = [name,phone,city,state,active]
+#     count = 0
+#     update_str = ''
+#     variable_bind_lst = []
+
+#     for field in lst_fields:
+#         if lst_values[count]:
+#             update_str = update_str + f'{field}=%s, '
+#             variable_bind_lst.append(lst_values[count])
+#             count += 1
+
+#     variable_bind_lst.append(user_id)
+
+#     cursor.execute('UPDATE organizations SET ' + update_str + ' WHERE org_id=%s',variable_bind_lst)
+#     conn.commit()
+
+#     return jsonify('updated user')
+
+# @app.route('/org/update/<org_id>', methods=['POST','PUT'])
+# def update_org_by_id(org_id):
+    
+#     data = request.form
+#     if not data:
+#         data = request.json
+    
+#     name = data.get('name')
+#     phone = data.get('phone')
+#     city = data.get('city')
+#     state = data.get('state')
+#     active = data.get('active')
+
+#     print(name)
+#     print(phone)
+
+#     data = update_org(org_id,name,phone,city,state,active)
+
+#     return (data)  
+
+
+
+
+# add_user('Blake','Hilleshiem','someemail@email.com','801-555-5555','Orem','UT',None,1)
+# user = get_user_by_id(1)
+# print(user)
+# add_user('John','Doe','someemail2@email.com','801-555-5555','Orem','UT',None,1)
+# add_user('Dobert','John','someemail3@email.com','801-555-5555','Orem','UT',None,1)
+
+# users = get_all_active_users()
+# print(users)
+
+# ---------- run this to run program
+
+
+
+
+---------- Sept 12 --------------- 
+
+ERD:
+-------------------------------
+1:1 - one element : one unique
+eg. user : email
+       1 : 1 
+
+      user
+| PK  |  user_id    |
+|  U  |  email      |
+
+
+1:M / M:1 - 
+
+      user (many)
+| PK  |  user_id    |
+|     |  first_name | <- one:many (requires you don't use a unique key)
+|     |  last_name  |
+| FK  |  comany_id  |
+
+     company (one)
+| PK  |  company_id |
+|     |  name       |
+|     |  address    |
+
+
+M:M - 
+
+      Users Company Xref
+| FK  |  user_id    |
+| FK  |  company_id |
+
+
+eg.
+SELECT price,coupon_discount FROM Pricing
+WHERE product_id = ''
+ORDER BY date DESC
+LIMIT 1 ; // gives current price
+
